@@ -67,6 +67,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Lemur\Lemur.csproj">
+      <Project>{1EAD0FD6-4CA5-460F-9E31-174DE591ACBD}</Project>
+      <Name>Lemur</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
