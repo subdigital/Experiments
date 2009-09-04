@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemur", "Lemur.csproj", "{1EAD0FD6-4CA5-460F-9E31-174DE591ACBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CD019232-F9F2-4E7B-AC46-A53757E9DF9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemur.Sample", "..\samples\Lemur.Sample\Lemur.Sample.csproj", "{2FA6E740-FEEE-4C6C-AD98-8BAC10B32BB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1EAD0FD6-4CA5-460F-9E31-174DE591ACBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EAD0FD6-4CA5-460F-9E31-174DE591ACBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EAD0FD6-4CA5-460F-9E31-174DE591ACBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EAD0FD6-4CA5-460F-9E31-174DE591ACBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FA6E740-FEEE-4C6C-AD98-8BAC10B32BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FA6E740-FEEE-4C6C-AD98-8BAC10B32BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FA6E740-FEEE-4C6C-AD98-8BAC10B32BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FA6E740-FEEE-4C6C-AD98-8BAC10B32BB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2FA6E740-FEEE-4C6C-AD98-8BAC10B32BB6} = {CD019232-F9F2-4E7B-AC46-A53757E9DF9B}
+	EndGlobalSection
+EndGlobal
