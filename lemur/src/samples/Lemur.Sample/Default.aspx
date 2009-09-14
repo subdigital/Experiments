@@ -4,12 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
-    <title></title>
+    <title>Lemur Test</title>
 </head>
 <body>
     <form id="form1" runat="server">
     <div>
-    
+    <h1>Lemur test</h1>
     </div>
     </form>
 </body>

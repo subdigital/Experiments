@@ -1,5 +1,10 @@
 using System;
 using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using log4net;
+using log4net.Appender;
 
 namespace Lemur
 {
@@ -7,11 +12,38 @@ namespace Lemur
     {
         public void Initialize()
         {
-            var appender = new log4net.Appender.AdoNetAppender();
-            appender.Name = "LemurAppender";
-            appender.ConnectionString = ConfigurationManager.ConnectionStrings["lemur"].ConnectionString;
+            Stream configStream = GetDefaultConfigStream();
 
-            log4net.Config.BasicConfigurator.Configure(appender);
+            if (configStream == null)
+                throw new Exception("Error loading default lemur config");
+
+            log4net.Config.XmlConfigurator.Configure(configStream);
+            
+            ResetAppenderConnectionString();
+
+            LogManager.GetLogger(GetType()).Info("Lemur initialized.");
         }
-    }
+
+        private Stream GetDefaultConfigStream()
+        {
+            Assembly asm = GetType().Assembly;
+            return asm.GetManifestResourceStream("Lemur.default.config");
+        }
+
+        private void ResetAppenderConnectionString()
+        {
+            var connStringSettings = ConfigurationManager.ConnectionStrings["Lemur"];
+            if (connStringSettings != null)
+            {
+                var loggerHierarchy = LogManager.GetRepository();
+                if (loggerHierarchy != null)
+                {
+                    var appender =
+                        (AdoNetAppender) loggerHierarchy.GetAppenders().Single(app => app.Name == "AdoNetAppender");
+                    appender.ConnectionString = connStringSettings.ConnectionString;
+                    appender.ActivateOptions();
+                }
+            }
+        }
+    } 
 }
