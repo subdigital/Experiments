@@ -1,0 +1,59 @@
+[evo] is a databsae migration framework targeting SQL Server, written in C# and Boo.  It is written by Ben Scheirman and published under the MIT License.  Read the LICENSE file for more details.
+
+Use evo to script & run migrations to capture the evolutionary nature of database changes.
+
+Usage:
+
+==CREATING A MIGRATION==
+
+> evo create some_migration_name
+
+	[evo] will create a new file in the default directory, appropriately numbered in order.
+ 		* 0001_some_migration_name.boo	
+ 		
+==LISTING MIGRATIONS==
+ 	
+> evo list
+
+	[evo] will list the migrations in the default directory, marking the one that your database is currently on
+		*   0001_some_migration_name.boo
+		*	0002_another_migration.boo
+		*==>0003_yet_another.boo
+		*	0004_my_current_migration.boo
+		
+[evo] looks for a file named evo.config to tell it what database to use.  You can change where it looks by supplying
+the -config [file] argument.
+
+==SPECIFYING THE DATABASE==
+
+> evo -config config\evo.config ...
+	
+	[evo] will use the config file specified instead.
+	
+You can also explicitly set the database connection information in the command line, like so:
+
+> evo -S localhost\SQLEXPRESS -db Foo
+
+	[evo] will default to use Trusted Connection=true.  If you need to specify username & password, then 
+	you can use the -u and -p arguments.
+	
+==RUNNING MIGRATIONS==
+
+> evo run
+
+	[evo] will execute the migrations in order, bringing you up to the latest version.
+	
+> evo run 12
+	
+	[evo] will execute the migrations in order, bringing you up to the version you specified.
+	If the version is less than your current version, then the down blocks will be executed 
+	to roll back until the version is reached.
+	
+==CREATING/DROPPING THE DATABASE==
+
+Sometimes it's helpful to quickly create or drop a database.  This is useful as part of a larger build process.
+
+> evo db create [dbname]	
+> evo db drop [dbname]
+
+	[evo] will connect to the server specified in the config file (or on the cmd line args).  The db argument will be ignored, because [evo] has to connect to 'master' in order to run this statement. The database will be created/dropped appropriately.
