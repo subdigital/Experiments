@@ -9,7 +9,7 @@ namespace evo.Core.Extensions
     {
         public static IEnumerable<Type> GetTypesImplementing<TBase>(this Assembly assembly)
         {
-            return assembly.GetTypes().Where(t => t.Imlpements<TBase>());
+            return assembly.GetTypes().Where(t => t.Imlpements<TBase>() && !t.IsAbstract && !t.IsInterface);
         }
 
         public static bool Imlpements<TBase>(this Type type)

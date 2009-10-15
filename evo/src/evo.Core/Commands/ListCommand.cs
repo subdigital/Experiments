@@ -6,9 +6,12 @@ namespace evo.Core.Commands
 {
     [CommandName("list")]
     public class ListCommand : CommandBase
-    {
-        public ListCommand(IDatabaseProvider provider, EvoOptions options) : base(provider, options)
+    {         
+        public IFileSystem FileSystem { get; set; }
+
+        public ListCommand(IFileSystem fileSystem, IDatabase database, EvoOptions options) : base(database, options)
         {
+            FileSystem = fileSystem;
         }
 
         public override bool IsValid()
@@ -19,7 +22,7 @@ namespace evo.Core.Commands
 
         public override void Execute(TextWriter outputWriter)
         {
-            if(!Directory.Exists(Options.ScriptDirectory))
+            if(!FileSystem.DirectoryExists(Options.ScriptDirectory))
             {
                 outputWriter.WriteLine(string.Format("The script directory {0} doesn't exist.  Have you created any migrations yet?", 
                     Options.ScriptDirectory));    
@@ -30,7 +33,7 @@ namespace evo.Core.Commands
 
             outputWriter.WriteLine("Migrations");
             outputWriter.WriteLine("----------------------------");
-            var files = Directory.GetFiles(Options.ScriptDirectory, "*.boo");
+            var files = FileSystem.GetFilesInDirectory(Options.ScriptDirectory, "*.boo");
             files.Each(file => outputWriter.WriteLine("\t" + file));
 
             outputWriter.WriteLine();

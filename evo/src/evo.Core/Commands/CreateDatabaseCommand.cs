@@ -6,7 +6,7 @@ namespace evo.Core.Commands
     [CommandName("createDatabase")]
     public class CreateDatabaseCommand : CommandBase
     {
-        public CreateDatabaseCommand(IDatabaseProvider provider, EvoOptions options) : base(provider, options)
+        public CreateDatabaseCommand(IDatabase database, EvoOptions options) : base(database, options)
         {         
         }
 
@@ -17,13 +17,13 @@ namespace evo.Core.Commands
 
         public override void Execute(TextWriter outputWriter)
         {
-            string databaseName = Options.Database;
-            
+            string databaseName = Options.Database;            
             Options.Database = "master";
+            Database.ResetConnectionDetailsFrom(Options);
 
-            ExecuteNonQuery(DatabaseProvider.GetCreateDatabaseSyntax(databaseName));
+            Database.CreateDatabase(databaseName);
             
-            outputWriter.WriteLine("Created database {0}", databaseName);
+            outputWriter.WriteLine("Created database [{0}]", databaseName);
         }
     }
 }

@@ -1,4 +1,4 @@
-[evo] is a databsae migration framework targeting SQL Server, written in C# and Boo.  It is written by Ben Scheirman and published under the MIT License.  Read the LICENSE file for more details.
+[evo] is a database migration framework targeting SQL Server, written in C# and Boo.  It is written by Ben Scheirman and published under the MIT License.  Read the LICENSE file for more details.
 
 Use evo to script & run migrations to capture the evolutionary nature of database changes.
 

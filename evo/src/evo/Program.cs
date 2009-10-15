@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Ninject;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using evo.Core;
 using evo.Core.Commands;
 using evo.Core.Extensions;
-using evo.Core.Providers;
+using Ninject.Parameters;
 
 namespace evo
 {
     public class Program
     {
-        private readonly IDatabaseProvider _databaseProvider = new SqlServerProvider(); 
-        private readonly List<string> _args;
+        IKernel _kernel;
+        readonly List<string> _args;
 
         public TextWriter Out
         {
@@ -20,15 +20,24 @@ namespace evo
         }
 
         static void Main(string[] args)
-        {
+        {            
             var program = new Program(args);
             program.Run();
         }
 
         public Program(IEnumerable<string> args)
-        {            
+        {
+            InitializeDependencies();
+
             _args = new List<string>(args);
             Out = Console.Out;
+        }
+
+        void InitializeDependencies()
+        {
+            _kernel = new StandardKernel(
+                new StandardDependenciesModule(), 
+                new CommandsModule());
         }
 
         public void Run()
@@ -39,12 +48,13 @@ namespace evo
                 return;
             }
 
-            var options = new EvoOptions();
-            options.Command = _args.ObtainAndRemove(0);
+            var options = new EvoOptions {Command = _args.ObtainAndRemove(0)};
 
             bool argsValid = ParseArgs(options);
             if(!argsValid)
                 return;
+
+            _kernel.Bind<EvoOptions>().ToConstant(options);
             
             ICommand cmd = GetCommand(options);
             if (cmd == null)
@@ -126,19 +136,10 @@ namespace evo
 
         private ICommand GetCommand(EvoOptions options)
         {
-            var commandAssembly = typeof(ICommand).Assembly;
-            var commands = commandAssembly.GetTypesImplementing<ICommand>()
-                .Where(c=>c.HasAttribute<CommandNameAttribute>());
+            var cmd = _kernel.Get<ICommand>(x => x.Name == options.Command, 
+                new ConstructorArgument("options", options));
 
-            var validCommandNames = commands.Select(c => c.GetAttribute<CommandNameAttribute>().Name);
-
-            if(! validCommandNames.Contains(options.Command))
-            {
-                return null;
-            }
-
-            Type CommandType = commands.Where(c => c.GetAttribute<CommandNameAttribute>().Name == options.Command).First();
-            return (CommandBase)Activator.CreateInstance(CommandType, _databaseProvider, options);
+            return cmd;
         }
 
         private void PrintUsage()

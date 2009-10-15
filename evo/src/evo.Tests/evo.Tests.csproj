@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BD9BA02F-BA53-428D-90DA-E58B8D0B5FD6}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -39,9 +39,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\mspec\Machine.Specifications.NUnit.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\ninject\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.6.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\mspec\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\rhino-mocks\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -57,11 +65,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\when_executing_ListCommand_with_invalid_script_directory.cs" />
+    <Compile Include="Commands\when_executing_CreateDatabaseCommand.cs" />
+    <Compile Include="Commands\when_executing_DropDatabaseCommand.cs" />
+    <Compile Include="Commands\when_executing_ListCommand.cs" />
+    <Compile Include="Commands\with_ListCommand.cs" />
+    <Compile Include="Commands\with_MockDatabase_and_TextWriter.cs" />
+    <Compile Include="Program\when_creating_Program.cs" />
+    <Compile Include="Program\when_running_with_no_arguments.cs" />
+    <Compile Include="Program\with_program_and_empty_args.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="with_null_program.cs" />
-    <Compile Include="ShellTests.cs" />
+    <Compile Include="Program\with_null_program.cs" />
+    <Compile Include="Providers\SqlServerProvider\create_basic_table_syntax.cs" />
+    <Compile Include="Providers\SqlServerProvider\create_complex_table_syntax.cs" />
+    <Compile Include="Providers\SqlServerProvider\create_database_syntax.cs" />
+    <Compile Include="Providers\SqlServerProvider\with_SqlServerProvider.cs" />
+    <Compile Include="Providers\SqlServerProvider\drop_table_syntax.cs" />
+    <Compile Include="Providers\when_creating_database.cs" />
+    <Compile Include="Providers\when_dropping_database.cs" />
+    <Compile Include="Providers\with_Database.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\evo.Core\evo.Core.csproj">
+      <Project>{A1B7D40F-1B5D-4AA1-B98C-35485AA900D3}</Project>
+      <Name>evo.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\evo\evo.csproj">
       <Project>{C1B1F53C-406B-4A4E-9F05-F8AEB3B0741A}</Project>
       <Name>evo</Name>

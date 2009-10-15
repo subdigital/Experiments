@@ -6,7 +6,7 @@ namespace evo.Core.Commands
     [CommandName("dropDatabase")]
     public class DropDatabaseCommand : CommandBase
     {
-        public DropDatabaseCommand(IDatabaseProvider provider, EvoOptions options) : base(provider, options)
+        public DropDatabaseCommand(IDatabase database, EvoOptions options) : base(database, options)
         {
         }
 
@@ -17,11 +17,12 @@ namespace evo.Core.Commands
 
         public override void Execute(TextWriter outputWriter)
         {
-            string databaseName = Options.Database;           
-
+            string databaseName = Options.Database;
             Options.Database = "master";
-            ExecuteNonQuery(DatabaseProvider.GetDropDatabaseSyntax(databaseName));           
-            outputWriter.WriteLine("Dropped database {0}", databaseName);
+            Database.ResetConnectionDetailsFrom(Options);
+
+            Database.DropDatabase(databaseName);
+            outputWriter.WriteLine("Dropped database [{0}]", databaseName);
         }
     }
 }

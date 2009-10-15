@@ -9,5 +9,6 @@ namespace evo.Core.Providers
         bool IsValidName(string name);
         string GetCreateDatabaseSyntax(string databaseName);
         string GetDropDatabaseSyntax(string databaseName);
+        string GetCreateTableSyntax(string name, params Column[] columns);
     }
 }
