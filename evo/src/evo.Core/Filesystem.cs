@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace evo.Core
@@ -14,5 +15,22 @@ namespace evo.Core
             return Directory.GetFiles(directory, pattern);
         }
 
+        public void CreateDirectory(string directory)
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        public void CreateFile(string path, string contents)
+        {
+            using(var writer = File.CreateText(path))
+            {
+                writer.Write(contents);    
+            }
+        }
+
+        public string PathCombine(string leftPart, string rightPart)
+        {
+            return Path.Combine(leftPart, rightPart);
+        }
     }
 }

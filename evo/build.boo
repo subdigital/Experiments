@@ -18,8 +18,9 @@ target compile, (init):
 target test, (compile):
 	exec(mspec, test_assembly)
 	
-target testReport, (compile):
+target report, (compile):
 	exec(mspec, "--html ${build_dir}\\Specs.html ${test_assembly}")
+	exec("start ${build_dir}\\Specs.html")
 
 target default, (test):
 	pass

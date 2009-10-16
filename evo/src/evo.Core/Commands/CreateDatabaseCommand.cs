@@ -17,13 +17,13 @@ namespace evo.Core.Commands
 
         public override void Execute(TextWriter outputWriter)
         {
-            string databaseName = Options.Database;            
-            Options.Database = "master";
-            Database.ResetConnectionDetailsFrom(Options);
-
-            Database.CreateDatabase(databaseName);
+            Database.Use("master");
+            Database.CreateDatabase(Options.Database);
             
-            outputWriter.WriteLine("Created database [{0}]", databaseName);
+            Database.Use(Options.Database);
+            Database.CreateMigrationTable();
+            
+            outputWriter.WriteLine("Created database [{0}]", Options.Database);
         }
     }
 }

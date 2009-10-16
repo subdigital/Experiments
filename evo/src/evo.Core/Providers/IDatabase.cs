@@ -12,6 +12,7 @@ namespace evo.Core.Providers
         T ExecuteScalar<T>(string query);
         void CreateDatabase(string name);
         void DropDatabase(string name);
-        void ResetConnectionDetailsFrom(EvoOptions options);
+        void Use(string databaseName);
+        void CreateMigrationTable();
     }
 }

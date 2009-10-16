@@ -1,0 +1,6 @@
+﻿migration {NUMBER}, {NAME}
+
+up:
+	#perform steps to bring the database up to this version
+	
+down:

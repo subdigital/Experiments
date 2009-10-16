@@ -13,7 +13,7 @@ namespace evo.Core.Commands
 
         public override bool IsValid()
         {
-            if(Options.AdditionalArgs.Length > 0)
+            if(Options.AdditionalArgs.Count > 0)
             {
                 foreach (var arg in Options.AdditionalArgs)
                 {

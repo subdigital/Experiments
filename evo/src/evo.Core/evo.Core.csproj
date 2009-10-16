@@ -68,6 +68,7 @@
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\CommandNameAttribute.cs" />
     <Compile Include="Commands\CreateDatabaseCommand.cs" />
+    <Compile Include="Commands\CreateMigrationCommand.cs" />
     <Compile Include="Commands\DropDatabaseCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
@@ -87,6 +88,9 @@
     <Compile Include="Providers\IDatabase.cs" />
     <Compile Include="Providers\IDatabaseProvider.cs" />
     <Compile Include="Providers\SqlServerProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Migration.template" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

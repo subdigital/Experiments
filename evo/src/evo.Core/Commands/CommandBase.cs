@@ -17,6 +17,11 @@ namespace evo.Core.Commands
         public abstract bool IsValid();
         public abstract void Execute(TextWriter outputWriter);
 
+        public virtual bool OutputCommandUsage(TextWriter outputWriter)
+        {
+            return false;
+        }
+
         protected bool DatabaseParametersValid()
         {
             if (Options.ServerName == null || Options.Database == null)

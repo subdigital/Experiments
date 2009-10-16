@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>169</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -65,10 +66,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentParser\when_parsing_create_command.cs" />
+    <Compile Include="Commands\when_executing_CreateMigrationCommand_without_script_dir.cs" />
+    <Compile Include="Commands\when_executing_CreateMigration_with_no_previous_migrations.cs" />
+    <Compile Include="Commands\when_executing_CreateMigration_with_some_previous_migrations.cs" />
     <Compile Include="Commands\when_executing_ListCommand_with_invalid_script_directory.cs" />
     <Compile Include="Commands\when_executing_CreateDatabaseCommand.cs" />
     <Compile Include="Commands\when_executing_DropDatabaseCommand.cs" />
     <Compile Include="Commands\when_executing_ListCommand.cs" />
+    <Compile Include="Commands\when_validating_CreateMigrationCommand_with_no_additional_args.cs" />
+    <Compile Include="Commands\with_CreateMigrationCommand.cs" />
+    <Compile Include="Commands\with_FileSystem.cs" />
     <Compile Include="Commands\with_ListCommand.cs" />
     <Compile Include="Commands\with_MockDatabase_and_TextWriter.cs" />
     <Compile Include="Program\when_creating_Program.cs" />

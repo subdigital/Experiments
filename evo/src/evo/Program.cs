@@ -42,33 +42,26 @@ namespace evo
 
         public void Run()
         {
-            if(_args.Count == 0)
+            if(!CheckEmptyArgsAndOutputUsage())
+                return;
+
+            var parser = new ArgumentParser(_args);
+            EvoOptions options = parser.BuildEvoOptions();
+            if(!parser.IsValid)
             {
-                PrintUsage();
+                PrintUsage(parser.ErrorMessage);
                 return;
             }
 
-            var options = new EvoOptions {Command = _args.ObtainAndRemove(0)};
-
-            bool argsValid = ParseArgs(options);
-            if(!argsValid)
-                return;
-
-            _kernel.Bind<EvoOptions>().ToConstant(options);
-            
-            ICommand cmd = GetCommand(options);
+            ICommand cmd = GetCommandAndValidate(options);
             if (cmd == null)
-            {
-                PrintUsage("Unknown command: " + options.Command);
-                return;
-            }
+                return;          
 
-            if(!cmd.IsValid())
-            {
-                PrintUsage("Invalid arguments for command: " + options.Command);
-                return;
-            }
+            RunCommand(cmd);
+        }
 
+        void RunCommand(ICommand cmd)
+        {
             try
             {
                 cmd.Execute(Out);
@@ -83,25 +76,49 @@ namespace evo
             }
         }
 
+        EvoOptions GetOptions()
+        {
+            var options = new EvoOptions {Command = _args.ObtainAndRemove(0)};
+
+            bool argsValid = ParseArgs(options);
+            if(!argsValid)
+                return null;
+
+            _kernel.Bind<EvoOptions>().ToConstant(options);
+            return options;
+        }
+
+        bool CheckEmptyArgsAndOutputUsage()
+        {
+            if(_args.Count == 0)
+            {
+                PrintUsage();
+                return false;
+            }
+
+            return true;
+        }
+
         private bool ParseArgs(EvoOptions options)
         {
             while(_args.Count > 0)
             {
                 string arg = _args.ObtainAndRemove(0);
-                if(!arg.StartsWith("--"))
+
+                if(arg.StartsWith("--"))
                 {
-                    PrintUsage("Unexpected token: " + arg);
-                    return false;
+                    arg = arg.TrimStart('-');
+                    if (_args.Count == 0)
+                        PrintUsage("Expected value for: " + arg);
+                    string value = _args.ObtainAndRemove(0);
+
+                    if (!ProcessArgumentAndValue(arg, value, options))
+                        return false;
                 }
-                arg = arg.TrimStart('-');
-
-                if(_args.Count == 0)
-                    PrintUsage("Expected value for: " + arg);
-
-                string value = _args.ObtainAndRemove(0);
-                
-                if (!ProcessArgumentAndValue(arg, value, options)) 
-                    return false;
+                else
+                {
+                    options.AdditionalArgs.Add(arg);
+                }
             }
 
             return true;
@@ -134,10 +151,25 @@ namespace evo
             return true;
         }
 
-        private ICommand GetCommand(EvoOptions options)
+        private ICommand GetCommandAndValidate(EvoOptions options)
         {
             var cmd = _kernel.Get<ICommand>(x => x.Name == options.Command, 
                 new ConstructorArgument("options", options));
+
+            if(cmd == null)
+                PrintUsage("Unknown command: " + options.Command);
+            else
+            {
+                if (!cmd.IsValid())
+                {
+                    if (!cmd.OutputCommandUsage(Console.Out))
+                    {
+                        PrintUsage("Invalid arguments for command: " + options.Command);
+                    }
+
+                    return null;
+                }
+            }
 
             return cmd;
         }

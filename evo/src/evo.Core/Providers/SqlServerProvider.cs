@@ -6,22 +6,28 @@ using System.Text;
 namespace evo.Core.Providers
 {
     public class SqlServerProvider : IDatabaseProvider
-    {
-        public string BuildConnectionString(EvoOptions options)
+    {     
+        public string BuildConnectionString(string server, string db)
         {
             var builder = new SqlConnectionStringBuilder
                               {
-                                  DataSource = options.ServerName,
-                                  InitialCatalog = options.Database
+                                  DataSource = server,
+                                  InitialCatalog = db,
+                                  IntegratedSecurity = true
                               };
 
-            if (options.TrustedConnection)
-                builder.IntegratedSecurity = true;
-            else
+            return builder.ConnectionString;
+        }
+
+        public string BuildConnectionString(string server, string db, string username, string password)
+        {
+            var builder = new SqlConnectionStringBuilder
             {
-                builder.UserID = options.Username;
-                builder.Password = options.Password;
-            }
+                DataSource = server,
+                InitialCatalog = db,
+                UserID = username,
+                Password = password
+            };
 
             return builder.ConnectionString;
         }

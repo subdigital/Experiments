@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace evo.Core
 {
     public class EvoOptions
@@ -11,6 +13,8 @@ namespace evo.Core
             ScriptDirectory = DefaultScriptDirectory;
             ConfigPath = DefaultConfigPath;
             TrustedConnection = true;
+
+            AdditionalArgs = new List<string>();
         }
 
         //settings
@@ -24,6 +28,6 @@ namespace evo.Core
 
         //command / behavior
         public string Command { get; set; }
-        public string[] AdditionalArgs { get; set; }
+        public IList<string> AdditionalArgs { get; set; }
     }
 }

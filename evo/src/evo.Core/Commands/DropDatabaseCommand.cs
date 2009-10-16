@@ -17,12 +17,9 @@ namespace evo.Core.Commands
 
         public override void Execute(TextWriter outputWriter)
         {
-            string databaseName = Options.Database;
-            Options.Database = "master";
-            Database.ResetConnectionDetailsFrom(Options);
-
-            Database.DropDatabase(databaseName);
-            outputWriter.WriteLine("Dropped database [{0}]", databaseName);
+            Database.Use("master");
+            Database.DropDatabase(Options.Database);
+            outputWriter.WriteLine("Dropped database [{0}]", Options.Database);
         }
     }
 }
