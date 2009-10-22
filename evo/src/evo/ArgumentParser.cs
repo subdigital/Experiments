@@ -8,53 +8,75 @@ namespace evo
     {
         IList<string> _args;
 
+        IDictionary<string, string> _settings;
+
         public ArgumentParser(IEnumerable<string> args)
         {
             _args = new List<string>(args);
             IsValid = true;
         }
 
-        public bool IsValid { get; private set; }
-        public string ErrorMessage { get; private set; }
-
-        public EvoOptions BuildEvoOptions()
+        public ArgumentParser(string commandLine)
+            :this(commandLine.Split(' '))
         {
-            var options = new EvoOptions { Command = _args.ObtainAndRemove(0) };
-
-            bool argsValid = ParseArgs(options);
-            if (!argsValid)
-                return null;
-
-            return options;
         }
 
-        private bool ParseArgs(EvoOptions options)
+        public string Option(string name)
         {
+            if(_settings == null)
+                Parse();
+
+            return _settings.ContainsKey(name) ? _settings[name] : null;
+        }
+
+        void Parse()
+        {
+            _settings = new Dictionary<string, string>();
+
             while (_args.Count > 0)
             {
                 string arg = _args.ObtainAndRemove(0);
 
                 if (arg.StartsWith("--"))
                 {
-                    arg = arg.TrimStart('-');
+                    arg = arg.TrimStart('-');                    
                     if (_args.Count == 0)
                     {
                         IsValid = false;
-                        ErrorMessage = "Expected value for: " + arg;                        
+                        ErrorMessage = "Expected value for: " + arg;
                     }
-                        
+
                     string value = _args.ObtainAndRemove(0);
-                    ParseArgumentAndValue(arg, value, options);
+                    _settings.Add(arg, value);                    
                 }
                 else
                 {
-                    options.AdditionalArgs.Add(arg);
+                    _settings.Add(arg, string.Empty);
                 }
             }
-
-            return true;
         }
 
+        public bool IsValid { get; private set; }
+
+        public void SetOptions(EvoOptions options)
+        {
+            options.Command = _args.ObtainAndRemove(0);
+
+            if(_settings == null)
+                Parse();
+
+            foreach (var key in _settings.Keys)
+            {
+                var value = _settings[key];
+                if(! value.IsNullOrEmpty())
+                    ParseArgumentAndValue(key, value, options);
+                else
+                    options.AdditionalArgs.Add(key);
+            }
+        }
+
+        public string ErrorMessage { get; private set; }
+        
         private void ParseArgumentAndValue(string arg, string value, EvoOptions options)
         {
             switch (arg)

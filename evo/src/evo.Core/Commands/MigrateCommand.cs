@@ -15,19 +15,27 @@ namespace evo.Core.Commands
         {
             if(Options.AdditionalArgs.Count > 0)
             {
-                foreach (var arg in Options.AdditionalArgs)
-                {
-                    int val;
-                    if(!Int32.TryParse(arg, out val))
-                        return false;
-                }
+                if (!EnsureIntegerArgs()) 
+                    return false;
             }
 
             return true;
         }
 
+        bool EnsureIntegerArgs()
+        {
+            foreach (var arg in Options.AdditionalArgs)
+            {
+                int val;
+                if(!Int32.TryParse(arg, out val))
+                    return false;
+            }
+            return true;
+        }
+
         public override void Execute(TextWriter outputWriter)
         {
+
         }
     }
 }

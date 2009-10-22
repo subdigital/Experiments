@@ -46,7 +46,15 @@ namespace evo
                 return;
 
             var parser = new ArgumentParser(_args);
-            EvoOptions options = parser.BuildEvoOptions();
+            
+           string configFile = parser.Option("config") ?? "evo.config";
+            var configParser = new ConfigParser(_kernel.Get<IFileSystem>(), configFile);
+            var options = new EvoOptions();
+            if (configParser.ConfigFileExists())
+                configParser.SetOptions(options);
+
+            //allow command line args to override config settings
+            parser.SetOptions(options);
             if(!parser.IsValid)
             {
                 PrintUsage(parser.ErrorMessage);

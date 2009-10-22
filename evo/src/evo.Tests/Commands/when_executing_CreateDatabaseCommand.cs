@@ -8,21 +8,23 @@ namespace evo.Tests.Commands
     [Subject("Commands")]
     public class when_executing_CreateDatabaseCommand : with_MockDatabase_and_TextWriter
     {
-        protected static CreateDatabaseCommand Command;
-
         Establish context = () => {
-                                var options = new EvoOptions {Database = "TestDatabase"};
-                                Command = new CreateDatabaseCommand(MockDatabase, options);
-                            };
+            var options = new EvoOptions {Database = "TestDatabase"};
+            Command = new CreateDatabaseCommand(MockDatabase, options);
+        };
 
-        Because of = () => Command.Execute(Out);
+        Because of = () => 
+                Command.Execute(Out);
 
         It should_create_the_database_with_the_appropriate_name = () =>
-            MockDatabase.AssertWasCalled(d => d.CreateDatabase("TestDatabase"));
+                MockDatabase.AssertWasCalled(d => d.CreateDatabase("TestDatabase"));
 
-        It should_create_the_MigrationInfo_table = () => MockDatabase.AssertWasCalled(d=>d.CreateMigrationTable());
+        It should_create_the_MigrationInfo_table = () => 
+                MockDatabase.AssertWasCalled(d=>d.CreateMigrationTable());
 
         It should_output_status_to_the_console = () =>
-            Out.ToString().ShouldContain("Created database [TestDatabase]");
+                Out.ToString().ShouldContain("Created database [TestDatabase]");
+
+        static CreateDatabaseCommand Command;
     }
 }

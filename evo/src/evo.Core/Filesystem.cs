@@ -32,5 +32,10 @@ namespace evo.Core
         {
             return Path.Combine(leftPart, rightPart);
         }
+
+        public bool FileExists(string filename)
+        {
+            return File.Exists(filename);
+        }
     }
 }

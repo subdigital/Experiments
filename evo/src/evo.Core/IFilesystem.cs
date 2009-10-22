@@ -7,5 +7,6 @@ namespace evo.Core
         void CreateDirectory(string directory);
         void CreateFile(string path, string contents);
         string PathCombine(string leftPart, string rightPart);
+        bool FileExists(string filename);
     }
 }

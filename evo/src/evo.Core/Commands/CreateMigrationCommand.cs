@@ -62,7 +62,7 @@ namespace evo.Core.Commands
             var template = reader.ReadToEnd();
 
             template = template.Replace("{NAME}", migrationName);
-            template = template.Replace("{NUMBER", migrationNumber.ToString());
+            template = template.Replace("{NUMBER}", migrationNumber.ToString());
 
             return template;
         }

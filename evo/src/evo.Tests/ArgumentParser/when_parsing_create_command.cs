@@ -6,9 +6,12 @@ namespace evo.Tests.ArgumentParser
     [Subject(typeof(evo.ArgumentParser), "Create command")]
     public class when_parsing_create_command
     {
-        Establish context = () => Parser = new evo.ArgumentParser(new[]{"create", "test"});
+        Establish context = () => {
+            Options = new EvoOptions();
+            Parser = new evo.ArgumentParser(new[] {"create", "test"});
+        };
 
-        Because of = () => Options = Parser.BuildEvoOptions();
+        Because of = () => Parser.SetOptions(Options);
 
         It should_be_valid = () => Parser.IsValid.ShouldBeTrue();
 
