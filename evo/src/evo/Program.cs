@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using evo.Core;
 using evo.Core.Commands;
-using evo.Core.Extensions;
-using Ninject.Parameters;
 
 namespace evo
 {
     public class Program
     {
         IKernel _kernel;
-        readonly List<string> _args;
+        List<string> _args;
 
         public TextWriter Out
         {
@@ -21,39 +19,24 @@ namespace evo
 
         static void Main(string[] args)
         {            
-            var program = new Program(args);
-            program.Run();
+            var program = new Program();
+            program.Run(args);
         }
 
-        public Program(IEnumerable<string> args)
+        public Program()
         {
             InitializeDependencies();
-
-            _args = new List<string>(args);
             Out = Console.Out;
         }
 
-        void InitializeDependencies()
+        public void Run(IEnumerable<string> args)
         {
-            _kernel = new StandardKernel(
-                new StandardDependenciesModule(), 
-                new CommandsModule());
-        }
-
-        public void Run()
-        {
+            _args = new List<string>(args);
             if(!CheckEmptyArgsAndOutputUsage())
                 return;
 
             var parser = new ArgumentParser(_args);
-            
-           string configFile = parser.Option("config") ?? "evo.config";
-            var configParser = new ConfigParser(_kernel.Get<IFileSystem>(), configFile);
-            var options = new EvoOptions();
-            if (configParser.ConfigFileExists())
-                configParser.SetOptions(options);
-
-            //allow command line args to override config settings
+            var options = new EvoOptions();            
             parser.SetOptions(options);
             if(!parser.IsValid)
             {
@@ -66,6 +49,13 @@ namespace evo
                 return;          
 
             RunCommand(cmd);
+        }
+
+        void InitializeDependencies()
+        {
+            _kernel = new StandardKernel(
+                new StandardDependenciesModule(), 
+                new CommandsModule());
         }
 
         void RunCommand(ICommand cmd)
@@ -84,18 +74,6 @@ namespace evo
             }
         }
 
-        EvoOptions GetOptions()
-        {
-            var options = new EvoOptions {Command = _args.ObtainAndRemove(0)};
-
-            bool argsValid = ParseArgs(options);
-            if(!argsValid)
-                return null;
-
-            _kernel.Bind<EvoOptions>().ToConstant(options);
-            return options;
-        }
-
         bool CheckEmptyArgsAndOutputUsage()
         {
             if(_args.Count == 0)
@@ -107,62 +85,13 @@ namespace evo
             return true;
         }
 
-        private bool ParseArgs(EvoOptions options)
-        {
-            while(_args.Count > 0)
-            {
-                string arg = _args.ObtainAndRemove(0);
-
-                if(arg.StartsWith("--"))
-                {
-                    arg = arg.TrimStart('-');
-                    if (_args.Count == 0)
-                        PrintUsage("Expected value for: " + arg);
-                    string value = _args.ObtainAndRemove(0);
-
-                    if (!ProcessArgumentAndValue(arg, value, options))
-                        return false;
-                }
-                else
-                {
-                    options.AdditionalArgs.Add(arg);
-                }
-            }
-
-            return true;
-        }
-
-        private bool ProcessArgumentAndValue(string arg, string value, EvoOptions options)
-        {
-            switch(arg)
-            {
-                case "server" :
-                    options.ServerName = value;
-                    break;
-
-                case "db":
-                    options.Database = value;
-                    break;
-
-                case "username":
-                    options.Database = value;
-                    break;
-
-                case "password":
-                    options.Database = value;
-                    break;
-
-                default:
-                    PrintUsage("Unknown argument:" + arg);
-                    return false;
-            }
-            return true;
-        }
-
         private ICommand GetCommandAndValidate(EvoOptions options)
         {
-            var cmd = _kernel.Get<ICommand>(x => x.Name == options.Command, 
-                new ConstructorArgument("options", options));
+            //store the options in the container for other classes that depend on it
+            _kernel.Bind<EvoOptions>().ToConstant(options);
+            
+            //get the command by name
+            var cmd = _kernel.Get<ICommand>(x => x.Name == options.Command);
 
             if(cmd == null)
                 PrintUsage("Unknown command: " + options.Command);

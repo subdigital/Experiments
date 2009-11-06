@@ -15,22 +15,22 @@ namespace evo.Core.DSL
             DownSteps = new List<IMigrationStep>();
         }
 
-        public string Name
+        public virtual string Name
         {
             get; private set;
         }
 
-        public int Version
+        public virtual int Version
         {
             get; private set;
         }
 
-        public Action UpAction
+        public virtual Action UpAction
         {
             get; private set;
         }
 
-        public Action DownAction
+        public virtual Action DownAction
         {
             get; private set;
         }

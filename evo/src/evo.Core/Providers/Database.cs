@@ -27,14 +27,11 @@ namespace evo.Core.Providers
             _trustedConnection = options.TrustedConnection;
         }
 
-        public string ConnectionString
+        public string BuildConnectionString()
         {
-            get
-            {
-                if(_trustedConnection)
-                    return _provider.BuildConnectionString(_server, _db);
-                return _provider.BuildConnectionString(_server, _db, _username, _password);
-            }
+            if (_trustedConnection)
+                return _provider.BuildConnectionString(_server, _db);
+            return _provider.BuildConnectionString(_server, _db, _username, _password);
         }
 
         public void Use(string dbName)
@@ -44,7 +41,7 @@ namespace evo.Core.Providers
 
         public IDbConnection GetConnection()
         {
-            return _provider.GetConnection(ConnectionString);
+            return _provider.GetConnection(BuildConnectionString());
         }
 
         public IDbCommand GetCommand(string query)

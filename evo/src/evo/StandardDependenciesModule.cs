@@ -1,4 +1,5 @@
 using evo.Core;
+using evo.Core.DSL;
 using evo.Core.Providers;
 using Ninject.Modules;
 
@@ -11,6 +12,7 @@ namespace evo
             Bind<IFileSystem>().To<Filesystem>();
             Bind<IDatabaseProvider>().To<SqlServerProvider>();
             Bind<IDatabase>().To<Database>();
+            Bind<IMigrationFactory>().To<MigrationFactory>();
         }
     }
 }

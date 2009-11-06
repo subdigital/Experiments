@@ -44,6 +44,7 @@ namespace evo
                     {
                         IsValid = false;
                         ErrorMessage = "Expected value for: " + arg;
+                        continue;
                     }
 
                     string value = _args.ObtainAndRemove(0);
@@ -90,11 +91,15 @@ namespace evo
                     break;
 
                 case "username":
-                    options.Database = value;
+                    options.Username = value;
                     break;
 
                 case "password":
-                    options.Database = value;
+                    options.Password = value;
+                    break;
+
+                case "config":
+                    options.ConfigPath = value;
                     break;
 
                 default:

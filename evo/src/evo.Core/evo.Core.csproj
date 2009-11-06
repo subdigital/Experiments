@@ -74,7 +74,9 @@
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="DSL\EvoEngine.cs" />
+    <Compile Include="DSL\IMigrationFactory.cs" />
     <Compile Include="DSL\MigrationBase.cs" />
+    <Compile Include="DSL\MigrationFactory.cs" />
     <Compile Include="EvoException.cs" />
     <Compile Include="EvoOptions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />

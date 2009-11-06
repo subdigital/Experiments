@@ -66,7 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentParser\when_parsing_arg_with_missing_value.cs" />
     <Compile Include="ArgumentParser\when_parsing_create_command.cs" />
+    <Compile Include="ArgumentParser\when_pulling_invalid_option.cs" />
+    <Compile Include="ArgumentParser\when_pulling_valid_option.cs" />
+    <Compile Include="ArgumentParser\when_setting_options.cs" />
+    <Compile Include="ArgumentParser\when_setting_options_with_uknown_arg.cs" />
     <Compile Include="Commands\when_executing_CreateMigrationCommand_without_script_dir.cs" />
     <Compile Include="Commands\when_executing_CreateMigration_with_no_previous_migrations.cs" />
     <Compile Include="Commands\when_executing_CreateMigration_with_some_previous_migrations.cs" />
@@ -81,9 +86,9 @@
     <Compile Include="Commands\with_MockDatabase_and_TextWriter.cs" />
     <Compile Include="Program\when_creating_Program.cs" />
     <Compile Include="Program\when_running_with_no_arguments.cs" />
-    <Compile Include="Program\with_program_and_empty_args.cs" />
+    <Compile Include="Program\when_running_with_unknown_command.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Program\with_null_program.cs" />
+    <Compile Include="Program\with_program.cs" />
     <Compile Include="Providers\SqlServerProvider\create_basic_table_syntax.cs" />
     <Compile Include="Providers\SqlServerProvider\create_complex_table_syntax.cs" />
     <Compile Include="Providers\SqlServerProvider\create_database_syntax.cs" />
@@ -92,6 +97,8 @@
     <Compile Include="Providers\when_creating_database.cs" />
     <Compile Include="Providers\when_dropping_database.cs" />
     <Compile Include="Providers\with_Database.cs" />
+    <Compile Include="RunningMigrations\when_running_migrations_with_no_current_version_and_migrations_available.cs" />
+    <Compile Include="SpecificationBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\evo.Core\evo.Core.csproj">

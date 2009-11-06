@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using evo.Core.DSL;
 using evo.Core.Extensions;
 using evo.Core.Providers;
 using evo.Core.Steps;
-using Rhino.DSL;
 
 namespace evo.Core
 {
     public class MigrationRunner
     {
-        private readonly string _baseDirectory;
+        readonly IMigrationFactory _migrationFactory;
         readonly IDatabase _database;
-        private readonly DslFactory _factory;
 
-        public MigrationRunner(string baseDirectory, IDatabase database)
+        public MigrationRunner(IMigrationFactory migrationFactory, IDatabase database)
         {
-            _baseDirectory = baseDirectory;
+            _migrationFactory = migrationFactory;
             _database = database;
-            _factory = new DslFactory();
-            _factory.Register<MigrationBase>(new EvoEngine());
         }
 
         public void Run()
@@ -31,7 +26,7 @@ namespace evo.Core
         public void Run(int? targetVersion)
         {
             int currentVersion = _database.CurrentMigration() ?? 0;
-            var migrations = _factory.CreateAll<MigrationBase>(_baseDirectory);
+            var migrations = _migrationFactory.CreateAll();
 
             if(targetVersion == null)
                 targetVersion = migrations.Max(m => m.Version);
@@ -47,7 +42,7 @@ namespace evo.Core
                 MigrateDown(migrationsToRun);
         }
 
-        void MigrateUp(IEnumerable<MigrationBase> migrations)
+        public virtual void MigrateUp(IEnumerable<MigrationBase> migrations)
         {
             foreach (var migration in migrations.OrderBy(m=>m.Version))
             {
@@ -56,7 +51,7 @@ namespace evo.Core
             }
         }
 
-        void MigrateDown(IEnumerable<MigrationBase> migrations)
+        public virtual void MigrateDown(IEnumerable<MigrationBase> migrations)
         {
             foreach (var migration in migrations.OrderByDescending(m => m.Version))
             {
@@ -66,7 +61,7 @@ namespace evo.Core
         }
 
         void RunSteps(IList<IMigrationStep> migrationSteps)
-        {            
+        {
         }
     }
 }

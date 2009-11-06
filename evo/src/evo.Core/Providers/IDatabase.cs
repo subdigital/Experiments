@@ -5,7 +5,7 @@ namespace evo.Core.Providers
 {
     public interface IDatabase
     {
-        string ConnectionString { get; }
+        string BuildConnectionString();
         IDbConnection GetConnection();
         int? CurrentMigration();
         void ExecuteQuery(string query);
